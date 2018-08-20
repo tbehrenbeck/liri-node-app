@@ -26,8 +26,13 @@ switch(input) {
 
 //------OMDB--------
 function getMovie () {
-  movie= process.argv[3];
-
+  if(!process.argv[3]){
+    movie= "mr+nobody";
+    console.log(chalk.redBright("No movie selected, default movie loaded"));
+  } else {
+    movie= process.argv[3];
+  }
+  
   var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=" + keys.omdb;
   request (queryUrl, function(error, response, body) {
     if (!error && response.statusCode === 200) {
@@ -60,7 +65,7 @@ function getBands () {
       console.log("\n" + chalk.blueBright.underline("Artist") + ": " + artist + "\n");
       console.log(chalk.blueBright("Venue") + ": " + JSON.parse(body)[0].venue.name);
       console.log(chalk.blueBright("Location") + ": " + JSON.parse(body)[0].venue.city + "," + JSON.parse(body)[0].venue.country);
-      console.log(chalk.blueBright("Time") + ": " + JSON.parse(body)[0].datetime);
+      console.log("\n" + chalk.blueBright("Time") + ": " + JSON.parse(body)[0].datetime + "\n");
       // console.log(moment((body)[0].datetime).format('MM/DD/YYYY'));
       console.log("==============================================");
     } else {
@@ -77,12 +82,17 @@ function getSong() {
     id: keys.spotify.id,
     secret: keys.spotify.secret
   });
-  
-  spotify.search({ type: 'track', query: song}, function(err, data) {
+
+  spotify.search({ type: 'track', query: song }, function(err, data) {
     if (err) {
       return console.log('Error occurred: ' + err);
+    } else {
+      console.log("==============================================");
+      console.log("\n" + chalk.greenBright.underline("Artist") + ": " + data.tracks.items[0].album.name + "\n");
+      console.log(chalk.greenBright("Song") + ": " + data.tracks.items[0].name);
+      console.log(chalk.greenBright("Album") + ": " + data.tracks.items[0].album.name);
+      console.log(chalk.greenBright("Preview") + ": " + data.tracks.items[0].external_urls.spotify + "\n");
+      console.log("==============================================");
     }
-  
-  console.log(JSON.parse(data)); 
   });
 }
