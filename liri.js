@@ -1,6 +1,7 @@
 require("dotenv").config();
 var request = require("request");
 var keys = require("./keys");
+const chalk = require('chalk');
 //var spotify = require('node-spotify-api');
 //var moment = require("moment");
 var movie;
@@ -29,14 +30,14 @@ function getMovie () {
 
       console.log("==============================================");
       console.log("");
-      console.log("Movie title: " + JSON.parse(body).Title);
-      console.log("Release year: " + JSON.parse(body).Year);
-      console.log("IMDB rating: " + JSON.parse(body).imdbRating);
-      console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
-      console.log("Movie production location: " + JSON.parse(body).Country);
-      console.log("Languages: " + JSON.parse(body).Language);
-      console.log("Plot: " + JSON.parse(body).Plot);
-      console.log("Actors: " + JSON.parse(body).Actors);
+      console.log("\n" + chalk.redBright.underline("Title") + ": " + JSON.parse(body).Title + "\n");
+      console.log(chalk.redBright("Release year: ") + JSON.parse(body).Year);
+      console.log(chalk.redBright("IMDB Rating: ") + JSON.parse(body).imdbRating);
+      console.log(chalk.redBright("Rotten Tomatoes Rating: ") + JSON.parse(body).Ratings[1].Value);
+      console.log(chalk.redBright("Production Location: ") + JSON.parse(body).Country);
+      console.log(chalk.redBright("Languages: ") + JSON.parse(body).Language);
+      console.log(chalk.redBright("Actors: ") + JSON.parse(body).Actors);
+      console.log("\n" + chalk.redBright("Plot: ") + JSON.parse(body).Plot + "\n");
       console.log("");
       console.log("==============================================");
 
@@ -55,9 +56,9 @@ function getBands () {
     if (!error && response.statusCode === 200) {
       console.log("==============================================");
       console.log("");
-      console.log("Venue: " + JSON.parse(body)[0].venue.name);
-      console.log("Location: " + JSON.parse(body)[0].venue.city + "," + JSON.parse(body)[0].venue.country);
-      console.log(JSON.parse(body)[0].datetime);
+      console.log("\n" + chalk.blueBright.underline("Venue") + ": " + JSON.parse(body)[0].venue.name + "\n");
+      console.log(chalk.blueBright("Location") + ": " + JSON.parse(body)[0].venue.city + "," + JSON.parse(body)[0].venue.country);
+      console.log(chalk.blueBright("Time") + ": " + JSON.parse(body)[0].datetime);
       // console.log(moment((body)[0].datetime, 'YYYY-MM-DD').format('MM/DD/YYYY'));
       console.log("");
       console.log("==============================================");
