@@ -40,23 +40,29 @@ function getMovie () {
     movie= "mr+nobody";
     console.log(chalk.bgRed.white("No movie selected, default movie loaded"));
   } else {
-    movie= input.trim();
+    movie= input.replace(/ /g, '+');
   }
   
   var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=" + keys.omdb;
   request (queryUrl, function(error, response, body) {
     if (!error && response.statusCode === 200) {
+       
+      if (JSON.parse(body).Response === "True") {
+        console.log()
+        console.log("==============================================");
+        console.log("\n" + chalk.redBright.underline("Title") + ": " + JSON.parse(body).Title + "\n");
+        console.log(chalk.redBright("Release year: ") + JSON.parse(body).Year);
+        console.log(chalk.redBright("IMDB Rating: ") + JSON.parse(body).imdbRating);
+        console.log(chalk.redBright("Rotten Tomatoes Rating: ") + JSON.parse(body).Ratings[1].Value);
+        console.log(chalk.redBright("Production Location: ") + JSON.parse(body).Country);
+        console.log(chalk.redBright("Languages: ") + JSON.parse(body).Language);
+        console.log(chalk.redBright("Actors: ") + JSON.parse(body).Actors);
+        console.log("\n" + chalk.redBright("Plot: ") + JSON.parse(body).Plot + "\n");
+        console.log("==============================================");
 
-      console.log("==============================================");
-      console.log("\n" + chalk.redBright.underline("Title") + ": " + JSON.parse(body).Title + "\n");
-      console.log(chalk.redBright("Release year: ") + JSON.parse(body).Year);
-      console.log(chalk.redBright("IMDB Rating: ") + JSON.parse(body).imdbRating);
-      console.log(chalk.redBright("Rotten Tomatoes Rating: ") + JSON.parse(body).Ratings[1].Value);
-      console.log(chalk.redBright("Production Location: ") + JSON.parse(body).Country);
-      console.log(chalk.redBright("Languages: ") + JSON.parse(body).Language);
-      console.log(chalk.redBright("Actors: ") + JSON.parse(body).Actors);
-      console.log("\n" + chalk.redBright("Plot: ") + JSON.parse(body).Plot + "\n");
-      console.log("==============================================");
+      } else {
+        console.log("\n" + chalk.bgRed.white("Looks like I don't have anything on that, try searching for somethign else." + "\n"));
+      }
 
     } else {
         console.log(error);
@@ -75,7 +81,7 @@ function getBands () {
       console.log("\n" + chalk.blueBright.underline("Artist") + ": " + artist + "\n");
       console.log(chalk.blueBright("Venue") + ": " + JSON.parse(body)[0].venue.name);
       console.log(chalk.blueBright("Location") + ": " + JSON.parse(body)[0].venue.city + "," + JSON.parse(body)[0].venue.country);
-      console.log(chalk.blueBright("Time") + ": " + moment(body[0].datetime, 'YYYY-MM-DDh-m-s').format('MM/DD/YYYY')  + "\n");
+      console.log(chalk.blueBright("Time") + ": " + moment(JSON.parse(body)[0].datetime.slice(0, 10), 'YYYY-MM-DD').format('MM/DD/YYYY')  + "\n")
       console.log("==============================================");
     } else {
       console.log(error);
