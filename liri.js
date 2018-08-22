@@ -72,17 +72,24 @@ function getMovie () {
 
 //-----Bands in Town------
 function getBands () {
-  artist= input.trim();
+  if (!input) {
+    console.log("\n" + chalk.bgRed.white("ERROR: You did not provide an artist\n"));
+    return;
+  } else {
+    var artist = input.trim();
+  };
 
   var queryUrl = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=" + keys.bandsintown;
   request (queryUrl, function(error, response, body) {
     if (!error && response.statusCode === 200) {
+
       console.log("==============================================");
       console.log("\n" + chalk.blueBright.underline("Artist") + ": " + artist + "\n");
       console.log(chalk.blueBright("Venue") + ": " + JSON.parse(body)[0].venue.name);
       console.log(chalk.blueBright("Location") + ": " + JSON.parse(body)[0].venue.city + "," + JSON.parse(body)[0].venue.country);
       console.log(chalk.blueBright("Time") + ": " + moment(JSON.parse(body)[0].datetime.slice(0, 10), 'YYYY-MM-DD').format('MM/DD/YYYY')  + "\n")
       console.log("==============================================");
+
     } else {
       console.log(error);
     }
@@ -100,7 +107,7 @@ function getSong() {
 
   spotify.search({ type: 'track', query: song }, function(err, data) {
     if (err) {
-      return console.log('Error occurred: ' + err);
+      return console.log(chalk.bgRed.white("\nSong not found, try searching for another song\n"));
     } else {
         console.log("==============================================");
         console.log("\n" + chalk.greenBright("Artist") + ": " + data.tracks.items[0].artists[0].name);
